@@ -1,26 +1,45 @@
+#!/usr/bin/python
+
 import webbrowser
 import os
 import re
-import media #import Class library needed
+import media  # import Class library needed
 
 # declare empty array
-movies = [] 
 
-## build our movies array 
-movies.append(media.Movie('toy story','http://vignette4.wikia.nocookie.net/disney/images/4/4c/Toy-story-movie-posters-4.jpg/revision/latest?cb=20140816182710','https://www.youtube.com/watch?v=KYz2wyBy3kc','4/5','cartoon'))
+movies = []
 
-movies.append(media.Movie('saw','http://vignette1.wikia.nocookie.net/sawfilms/images/f/fa/Saw_1.jpg/revision/latest?cb=20120227145927','https://www.youtube.com/watch?v=OCZp5v8V-94', '4/5','horror'))
+## build our movies array
 
-movies.append(media.Movie('shawshank redemption', 'http://ecx.images-amazon.com/images/I/51SPVi-1rXL._SY355_.jpg','https://www.youtube.com/watch?v=6hB3S9bIaco','5/5','drama'))
+movies.append(media.Movie('toy story',
+              'http://vignette4.wikia.nocookie.net/disney/images/4/4c/Toy-story-movie-posters-4.jpg/revision/latest?cb=20140816182710'
+              , 'https://www.youtube.com/watch?v=KYz2wyBy3kc', '4/5',
+              'cartoon'))
+
+movies.append(media.Movie('saw',
+              'http://vignette1.wikia.nocookie.net/sawfilms/images/f/fa/Saw_1.jpg/revision/latest?cb=20120227145927'
+              , 'https://www.youtube.com/watch?v=OCZp5v8V-94', '4/5',
+              'horror'))
+
+movies.append(media.Movie('shawshank redemption',
+              'http://ecx.images-amazon.com/images/I/51SPVi-1rXL._SY355_.jpg'
+              , 'https://www.youtube.com/watch?v=6hB3S9bIaco', '5/5',
+              'drama'))
+
 
 ## define main method which allows me to group code at top of page
+
 def main():
-    #Call the pre-written method for displaying the movies in browser.
+
+    # Call the pre-written method for displaying the movies in browser.
+
     open_movies_page(movies)
 
 
 # Styles and scripting for the page
-main_page_head = '''
+
+main_page_head = \
+    '''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,9 +119,10 @@ main_page_head = '''
 </head>
 '''
 
-
 # The main page layout and title bar
-main_page_content = '''
+
+main_page_content = \
+    '''
   <body>
     <!-- Trailer Video Modal -->
     <div class="modal" id="trailer">
@@ -133,56 +153,67 @@ main_page_content = '''
 </html>
 '''
 
-
 # A single movie entry html template
-movie_tile_content = '''
+# modified to also pick up genre from our object.
+
+movie_tile_content = \
+    '''
 <div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
     <img src="{poster_image_url}" width="220" height="342">
     <h2>{movie_title}</h2>
-    <h3>{genre}</h3>
+    <h3>{genre}</h3> 
 </div>
 '''
 
 
 def create_movie_tiles_content(movies):
+
     # The HTML content for this section of the page
+
     content = ''
     for movie in movies:
+
         # Extract the youtube ID from the url
-        youtube_id_match = re.search(
-            r'(?<=v=)[^&#]+', movie.trailer_youtube_url)
-        youtube_id_match = youtube_id_match or re.search(
-            r'(?<=be/)[^&#]+', movie.trailer_youtube_url)
-        trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
-                              else None)
+
+        youtube_id_match = re.search(r'(?<=v=)[^&#]+',
+                movie.trailer_youtube_url)
+        youtube_id_match = youtube_id_match \
+            or re.search(r'(?<=be/)[^&#]+', movie.trailer_youtube_url)
+        trailer_youtube_id = \
+            (youtube_id_match.group(0) if youtube_id_match else None)
 
         # Append the tile for the movie with its content filled in
-        content += movie_tile_content.format(
-            movie_title=movie.title,
-            poster_image_url=movie.poster_image_url,
-            trailer_youtube_id=trailer_youtube_id,
-            genre = movie.genre #lets also grab the genre
-        )
+
+        content += movie_tile_content.format(movie_title=movie.title,
+                poster_image_url=movie.poster_image_url,
+                trailer_youtube_id=trailer_youtube_id,
+                genre=movie.genre)  # lets also grab the genre
     return content
 
 
 def open_movies_page(movies):
+
     # Create or overwrite the output file
+
     output_file = open('fresh_tomatoes.html', 'w')
 
     # Replace the movie tiles placeholder generated content
-    rendered_content = main_page_content.format(
-        movie_tiles=create_movie_tiles_content(movies))
+
+    rendered_content = \
+        main_page_content.format(movie_tiles=create_movie_tiles_content(movies))
 
     # Output the file
+
     output_file.write(main_page_head + rendered_content)
     output_file.close()
 
     # open the output file in the browser (in a new tab, if possible)
+
     url = os.path.abspath(output_file.name)
     webbrowser.open('file://' + url, new=2)
-    
 
-## mainly because I don't like working at bottom of the file! 
-if __name__ =="__main__":
+
+## mainly because I don't like working at bottom of the file!
+
+if __name__ == '__main__':
     main()
