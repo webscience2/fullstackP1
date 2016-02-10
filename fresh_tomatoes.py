@@ -9,25 +9,22 @@ import media  # import Class library needed
 
 movies = []
 
-## build our movies array
+# build our movies array
 
 movies.append(media.Movie('toy story',
-              'http://vignette4.wikia.nocookie.net/disney/images/4/4c/Toy-story-movie-posters-4.jpg/revision/latest?cb=20140816182710'
-              , 'https://www.youtube.com/watch?v=KYz2wyBy3kc', '4/5',
-              'cartoon'))
+                          'http://vignette4.wikia.nocookie.net/disney/images/4/4c/Toy-story-movie-posters-4.jpg/revision/latest?cb=20140816182710', 'https://www.youtube.com/watch?v=KYz2wyBy3kc', '4/5',
+                          'cartoon'))
 
 movies.append(media.Movie('saw',
-              'http://vignette1.wikia.nocookie.net/sawfilms/images/f/fa/Saw_1.jpg/revision/latest?cb=20120227145927'
-              , 'https://www.youtube.com/watch?v=OCZp5v8V-94', '4/5',
-              'horror'))
+                          'http://vignette1.wikia.nocookie.net/sawfilms/images/f/fa/Saw_1.jpg/revision/latest?cb=20120227145927', 'https://www.youtube.com/watch?v=OCZp5v8V-94', '4/5',
+                          'horror'))
 
 movies.append(media.Movie('shawshank redemption',
-              'http://ecx.images-amazon.com/images/I/51SPVi-1rXL._SY355_.jpg'
-              , 'https://www.youtube.com/watch?v=6hB3S9bIaco', '5/5',
-              'drama'))
+                          'http://ecx.images-amazon.com/images/I/51SPVi-1rXL._SY355_.jpg', 'https://www.youtube.com/watch?v=6hB3S9bIaco', '5/5',
+                          'drama'))
 
 
-## define main method which allows me to group code at top of page
+# define main method which allows me to group code at top of page
 
 def main():
 
@@ -161,7 +158,7 @@ movie_tile_content = \
 <div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
     <img src="{poster_image_url}" width="220" height="342">
     <h2>{movie_title}</h2>
-    <h3>{genre}</h3> 
+    <h3>{genre}</h3>
 </div>
 '''
 
@@ -176,7 +173,7 @@ def create_movie_tiles_content(movies):
         # Extract the youtube ID from the url
 
         youtube_id_match = re.search(r'(?<=v=)[^&#]+',
-                movie.trailer_youtube_url)
+                                     movie.trailer_youtube_url)
         youtube_id_match = youtube_id_match \
             or re.search(r'(?<=be/)[^&#]+', movie.trailer_youtube_url)
         trailer_youtube_id = \
@@ -185,9 +182,9 @@ def create_movie_tiles_content(movies):
         # Append the tile for the movie with its content filled in
 
         content += movie_tile_content.format(movie_title=movie.title,
-                poster_image_url=movie.poster_image_url,
-                trailer_youtube_id=trailer_youtube_id,
-                genre=movie.genre)  # lets also grab the genre
+                                             poster_image_url=movie.poster_image_url,
+                                             trailer_youtube_id=trailer_youtube_id,
+                                             genre=movie.genre)  # lets also grab the genre
     return content
 
 
@@ -200,7 +197,8 @@ def open_movies_page(movies):
     # Replace the movie tiles placeholder generated content
 
     rendered_content = \
-        main_page_content.format(movie_tiles=create_movie_tiles_content(movies))
+        main_page_content.format(
+            movie_tiles=create_movie_tiles_content(movies))
 
     # Output the file
 
@@ -213,7 +211,7 @@ def open_movies_page(movies):
     webbrowser.open('file://' + url, new=2)
 
 
-## mainly because I don't like working at bottom of the file!
+# mainly because I don't like working at bottom of the file!
 
 if __name__ == '__main__':
     main()
